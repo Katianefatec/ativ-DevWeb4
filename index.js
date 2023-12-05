@@ -1,31 +1,107 @@
-(async () => {
-    const database = require('./db');
-    const Produto = require('./produto');
+const sequelize = require('./db');
+const User = require('./usuarios');
+const Produto = require('./produto');
 
-    const resultado = await database.sync();
+// sequelize.sync().then(() => {
+//   console.log('Tabelas criadas');
+// }).catch((error) => {
+//   console.log('Erro ao criar as tabelas:', error);
 
-    const resultadoCreate = await Produto.create({
-        nome: 'Camiseta',
-        preco: 29.90,
-        descricao: 'Camiseta Preta',
-    })
+sequelize.sync().then(() => {
+    console.log('Tabelas criadas');
 
-    const resultadoCreat1 = await Produto.create({
-        nome: 'Bermuda',
-        preco: 49.90,
-        descricao: 'Bermuda Preta',
-    })
+// Criar um novo produto
+Produto.create({
+    nome: 'Camiseta',
+    valor: 100.0
+  }).then(produto => {
+    console.log('Produto criado:', produto);
+  }).catch(error => {
+    console.log('Erro ao criar produto:', error);
+  });
 
-    const produtos = await Produto.findByPk(2);
-    console.log(produtos);
+  Produto.create({
+    nome: 'Bermuda',
+    valor: 100.0
+  }).then(produto => {
+    console.log('Produto criado:', produto);
+  }).catch(error => {
+    console.log('Erro ao criar produto:', error);
+  });
 
-    const produto = await Produto.findByPk(1);
-    produto.nome='Cropped';
+  // Ler todos os produtos
+  Produto.findAll().then(produtos => {
+    console.log('Todos os produtos:', produtos);
+  }).catch(error => {
+    console.log('Erro ao ler produtos:', error);
+  });
 
-    const resultadoSave = await produto.save();
-    console.log(resultadoSave);
+  // Atualizar um produto
+  Produto.update({
+    valor: 200.0
+  }, {
+    where: {
+      id: 1
+    }
+  }).then(() => {
+    console.log('Produto atualizado');
+  }).catch(error => {
+    console.log('Erro ao atualizar produto:', error);
+  });
 
-    const produto1 = await Produto.findByPk(1);
-    produto.destroy();
-        
-})();
+  // Deletar um produto
+  Produto.destroy({
+    where: {
+      id: 2
+    }
+  }).then(() => {
+    console.log('Produto deletado');
+  }).catch(error => {
+    console.log('Erro ao deletar produto:', error);
+  });
+
+  User.create({
+    nome: 'Marcos',
+    consumo: 100
+  }).then(usuario => {
+    console.log('Usuário criado:', usuario);
+  }).catch(error => {
+    console.log('Erro ao criar usuário:', error);
+  });
+
+  // Ler todos os usuários
+  User.findAll().then(usuarios => {
+    console.log('Todos os usuários:', usuarios);
+  }).catch(error => {
+    console.log('Erro ao ler usuários:', error);
+  });
+
+  // Atualizar um usuário
+  User.update({
+    consumo: 200
+  }, {
+    where: {
+      id: 1
+    }
+  }).then(() => {
+    console.log('Usuário atualizado');
+  }).catch(error => {
+    console.log('Erro ao atualizar usuário:', error);
+  });
+
+  // Deletar um usuário
+  User.destroy({
+    where: {
+      id: 1
+    }
+  }).then(() => {
+    console.log('Usuário deletado');
+  }).catch(error => {
+    console.log('Erro ao deletar usuário:', error);
+  });
+
+
+}).catch((error) => {
+  console.log('Erro ao criar as tabelas:', error);
+});
+
